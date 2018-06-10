@@ -1,0 +1,62 @@
+version: '3.6'
+services:
+
+  api:
+    build: .
+    image: businesses-api
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      - yelp-net
+    links:
+      - mongo
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+
+
+  mysql:
+    image: mysql:5
+    restart: always
+    networks:
+      - yelp-net
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db-init/:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+
+  mongo:
+    image: mongo:latest
+    networks:
+      - yelp-net
+    volumes:
+      - mongo-data:/data/db
+      - ./db-init/:/docker-entrypoint-initdb.d 
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: hunter2
+      MONGO_INITDB_DATABASE: yelpmdb
+
+
+networks:
+  yelp-net:
+    driver: bridge
+volumes:
+  mysql-data:
+    name: businesses-mysql-data
+  mongo-data:
+    name: users-mongo-data

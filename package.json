@@ -1,0 +1,33 @@
+{
+  "name": "master-assignment-3",
+  "version": "1.1.0",
+  "description": "A small business review API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OSU-CS493-Sp18/master-assignment-3.git"
+  },
+  "author": "Hess <hessro@oregonstate.edu>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/OSU-CS493-Sp18/master-assignment-3/issues"
+  },
+  "homepage": "https://github.com/OSU-CS493-Sp18/master-assignment-3#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongodb": "^3.1.0-beta4",
+    "morgan": "^1.9.0",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}

@@ -1,0 +1,1146 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Businesses API",
+    "description": "A simple API for a Yelp-like application."
+  },
+  "paths": {
+    "/businesses": {
+      "get": {
+        "summary": "Fetch a list of businesses",
+        "description": "Returns a paginated list of businesses.\n",
+        "operationId": "getBusinesses",
+        "tags": [
+          "businesses"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies a specific page of businesses to request.\n",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pageNumber": {
+                      "type": "integer",
+                      "description": "Page number of returned businesses.",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "description": "Total number of pages available.",
+                      "example": 127
+                    },
+                    "pageSize": {
+                      "type": "integer",
+                      "description": "Number of businesses per page.",
+                      "example": 10
+                    },
+                    "totalCount": {
+                      "type": "integer",
+                      "description": "Total number of businesses.",
+                      "example": 1264
+                    },
+                    "lodgings": {
+                      "type": "array",
+                      "description": "The returned businesses.",
+                      "items": {
+                        "$ref": "#/components/schemas/Business"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new business",
+        "description": "Creates a new business with specified data and adds it to the application's database.\n",
+        "operationId": "addNewBusiness",
+        "tags": [
+          "businesses"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Business"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New business successfully added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Unique ID of the created business.",
+                      "example": 19
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/businesses/{businessID}": {
+      "parameters": [
+        {
+          "name": "businessID",
+          "in": "path",
+          "description": "Unique ID of a business.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 8,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch data for a specific business.",
+        "description": "Returns complete data for a the business specified by `businessID`.\n",
+        "operationId": "getBusiness",
+        "tags": [
+          "businesses"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Business"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `businessID` not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update data for a specific business.",
+        "description": "Replaces the data for the business specified by `businessID`.\n",
+        "operationId": "replaceBusiness",
+        "tags": [
+          "businesses"
+        ],
+        "requestBody": {
+          "description": "Business data to replace data for the business specified by `businessID`.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Business"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `businessID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a specific business from the database.",
+        "description": "Completely removes the data for the business specified by `businessID`.\n",
+        "operationId": "removeBusiness",
+        "tags": [
+          "businesses"
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Specified `businessID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos": {
+      "post": {
+        "summary": "Add a new photo",
+        "description": "Creates a new photo with specified data and adds it to the application's database.\n",
+        "operationId": "addNewPhoto",
+        "tags": [
+          "photos"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Photo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New photo successfully added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Unique ID of the created photo.",
+                      "example": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{photoID}": {
+      "parameters": [
+        {
+          "name": "photoID",
+          "in": "path",
+          "description": "Unique ID of a photo.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 0,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch data for a specific photo.",
+        "description": "Returns complete data for a the photo specified by `photoID`.\n",
+        "operationId": "getPhoto",
+        "tags": [
+          "photos"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `photoID` not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update data for a specific photo.",
+        "description": "Replaces the data for the photo specified by `photo`.\n",
+        "operationId": "replacePhoto",
+        "tags": [
+          "photos"
+        ],
+        "requestBody": {
+          "description": "Photo data to replace data for the photo specified by `photoID`.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Photo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request tried to change the `userID` or the `businessID` for a photo.  Once a photo is created, these cannot be changed.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `photoID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a specific photo from the database.",
+        "description": "Completely removes the data for the photo specified by `photoID`.\n",
+        "operationId": "removePhoto",
+        "tags": [
+          "photos"
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Specified `photoID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "post": {
+        "summary": "Add a new review",
+        "description": "Creates a new review with specified data and adds it to the application's database.\n",
+        "operationId": "addNewReview",
+        "tags": [
+          "reviews"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New review successfully added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Unique ID of the created review.",
+                      "example": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The specified user has already posted a review for the specified business.  A given user may only post one review for a given business.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{reviewID}": {
+      "parameters": [
+        {
+          "name": "reviewID",
+          "in": "path",
+          "description": "Unique ID of a review.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 0,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch data for a specific review.",
+        "description": "Returns complete data for a the review specified by `reviewID`.\n",
+        "operationId": "getReview",
+        "tags": [
+          "reviews"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `reviewID` not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update data for a specific review.",
+        "description": "Replaces the data for the review specified by `review`.\n",
+        "operationId": "replaceReview",
+        "tags": [
+          "reviews"
+        ],
+        "requestBody": {
+          "description": "Review data to replace data for the review specified by `reviewID`.\n",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request tried to change the `userID` or the `businessID` for a review.  Once a review is created, these cannot be changed.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `reviewID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a specific review from the database.",
+        "description": "Completely removes the data for the review specified by `reviewID`.\n",
+        "operationId": "removeReview",
+        "tags": [
+          "reviews"
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Specified `reviewID` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Fetch a list of categories",
+        "description": "Returns a list of top-level business categories.\n",
+        "operationId": "getCategories",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "description": "The returned categories.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new top-level category",
+        "description": "Adds a new top-level business category to the application's database.\n",
+        "operationId": "addNewCategory",
+        "tags": [
+          "categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "The top-level category string",
+                    "example": "Service"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New category successfully added"
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The specified category already exists.  Duplicate categories are not allowed.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{category}": {
+      "parameters": [
+        {
+          "name": "category",
+          "in": "path",
+          "description": "Unique top-level category string.",
+          "schema": {
+            "type": "string"
+          },
+          "example": "Restaurant",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch a list of subcategories",
+        "description": "Returns a list of subcategories for a top-level business category.\n",
+        "operationId": "getSubcategories",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string",
+                      "description": "The specified top-level category."
+                    },
+                    "subcategories": {
+                      "type": "array",
+                      "description": "The subcategories for the specified category.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Specified `category` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new subcategory",
+        "description": "Adds a new subcategory to a top-level business category in the application's database.\n",
+        "operationId": "addNewSubcategory",
+        "tags": [
+          "categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subcategory": {
+                    "type": "string",
+                    "description": "The subcategory string",
+                    "example": "Service"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New subcategory successfully added"
+          },
+          "400": {
+            "description": "The request body was either not present or did not contain all of the required fields.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The specified subcategory already exists for the specified top-level category.  Duplicate subcategories are not allowed.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a category",
+        "description": "Deletes the top-level category specified by `category`.\n",
+        "operationId": "removeCategory",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Specified `category` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{category}/{subcategory}": {
+      "parameters": [
+        {
+          "name": "category",
+          "in": "path",
+          "description": "Unique top-level category string.",
+          "schema": {
+            "type": "string"
+          },
+          "example": "Restaurant",
+          "required": true
+        },
+        {
+          "name": "subcategory",
+          "in": "path",
+          "description": "Unique subcategory string.",
+          "schema": {
+            "type": "string"
+          },
+          "example": "Pizza",
+          "required": true
+        }
+      ],
+      "delete": {
+        "summary": "Delete a subcategory",
+        "description": "Deletes the subcategory specified by `subcategory` under the top-level category specified by `category`.\n",
+        "operationId": "removeSubcategory",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Specified `category` or `subcategory` not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userID}/businesses": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "description": "Unique ID of a user.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 0,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch a user's owned businesses.",
+        "description": "Returns a list of all of the businesses owned by the user specified by `userID`.\n",
+        "operationId": "getUserBusinesses",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lodgings": {
+                      "type": "array",
+                      "description": "The businesses owned by the specified user.",
+                      "items": {
+                        "$ref": "#/components/schemas/Business"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userID}/reviews": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "description": "Unique ID of a user.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 21,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch a user's reviews.",
+        "description": "Returns a list of all of the reviews written by the user specified by `userID`.\n",
+        "operationId": "getUserReviews",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lodgings": {
+                      "type": "array",
+                      "description": "The reviews written by the specified user.",
+                      "items": {
+                        "$ref": "#/components/schemas/Review"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userID}/photos": {
+      "parameters": [
+        {
+          "name": "userID",
+          "in": "path",
+          "description": "Unique ID of a user.",
+          "schema": {
+            "type": "integer"
+          },
+          "example": 21,
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Fetch a user's photos.",
+        "description": "Returns a list of all of the photos posted by the user specified by `userID`.\n",
+        "operationId": "getUserPhotos",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lodgings": {
+                      "type": "array",
+                      "description": "The photos posted by the specified user.",
+                      "items": {
+                        "$ref": "#/components/schemas/Photo"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Business": {
+        "description": "An object representing information about a single business.\n",
+        "type": "object",
+        "properties": {
+          "ownerID": {
+            "type": "integer",
+            "description": "The ID of the user who owns this business.  This is required when creating or updating a business.\n",
+            "example": 16
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the business.",
+            "example": "American Dream Pizza"
+          },
+          "address": {
+            "type": "string",
+            "description": "Street address of the business.",
+            "example": "2525 NW Monroe Ave."
+          },
+          "city": {
+            "type": "string",
+            "description": "The city in which the business resides.",
+            "example": "Corvallis"
+          },
+          "state": {
+            "type": "string",
+            "description": "The state in which the business resides.",
+            "example": "OR"
+          },
+          "zip": {
+            "type": "string",
+            "description": "The zip code of the city in which the business resides.",
+            "example": "97330"
+          },
+          "phone": {
+            "type": "string",
+            "description": "The business' phone number.",
+            "example": "541-757-1713"
+          },
+          "category": {
+            "type": "string",
+            "description": "The business' category.",
+            "example": "Restaurant"
+          },
+          "subcategory": {
+            "type": "string",
+            "description": "The business' subcategory.",
+            "example": "Pizza"
+          },
+          "website": {
+            "type": "string",
+            "description": "The business' website URL.",
+            "example": "http://adpizza.com"
+          },
+          "email": {
+            "type": "string",
+            "description": "The business' email address.",
+            "example": "brian@adpizza.com"
+          },
+          "reviews": {
+            "type": "array",
+            "description": "An array of reviews of the business.  These are only returned when fetching detailed information about a business.\n",
+            "items": {
+              "$ref": "#/components/schemas/Review"
+            }
+          },
+          "photos": {
+            "type": "array",
+            "description": "An array of photos of the business.  These are only returned when fetching detailed information about a business.\n",
+            "items": {
+              "$ref": "#/components/schemas/Photo"
+            }
+          }
+        },
+        "required": [
+          "ownerID",
+          "name",
+          "address",
+          "city",
+          "state",
+          "zip",
+          "phone",
+          "category",
+          "subcategory"
+        ]
+      },
+      "Photo": {
+        "description": "An object representing information about a photo of a business.\n",
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "The ID of the user associated with this photo.  This is required when creating or updating a photo.\n",
+            "example": 7
+          },
+          "businessID": {
+            "type": "integer",
+            "description": "The ID of the business associated with this photo.  This is required when creating or updating a photo.\n",
+            "example": 3
+          },
+          "caption": {
+            "type": "string",
+            "description": "Caption text for the photo",
+            "example": "Kale!"
+          },
+          "data": {
+            "type": "string",
+            "format": "byte",
+            "description": "Raw image data for the photo."
+          }
+        },
+        "required": [
+          "userID",
+          "businessID",
+          "data"
+        ]
+      },
+      "Review": {
+        "description": "An object representing information about a review of a business.\n",
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "description": "The ID of the user associated with this review.  This is required when creating or updating a review.\n",
+            "example": 7
+          },
+          "businessID": {
+            "type": "integer",
+            "description": "The ID of the business associated with this review.  This is required when creating or updating a review.\n",
+            "example": 3
+          },
+          "dollars": {
+            "type": "integer",
+            "description": "A rating of the expensiveness of a business.  Must be an integer between 1 and 4.",
+            "example": 3,
+            "minimum": 1,
+            "maximum": 4
+          },
+          "stars": {
+            "type": "number",
+            "description": "A rating of the quality of a business.  Must be an number between 0 and 5.",
+            "example": 5,
+            "minimum": 0,
+            "maximum": 5
+          },
+          "review": {
+            "type": "string",
+            "description": "Textual business review.",
+            "example": "Great produce!"
+          }
+        },
+        "required": [
+          "userID",
+          "businessID",
+          "dollars",
+          "stars"
+        ]
+      },
+      "Error": {
+        "description": "An object representing an error response from the API.\n",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "A message describing the error."
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "businesses",
+      "description": "API endpoints related to business resources.\n"
+    }
+  ]
+}
