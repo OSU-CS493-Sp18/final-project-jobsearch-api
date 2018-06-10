@@ -45,11 +45,11 @@ services:
       - yelp-net
     volumes:
       - mongo-data:/data/db
-      - ./db-init/:/docker-entrypoint-initdb.d 
+      - ./db-init/:/docker-entrypoint-initdb.d
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: hunter2
-      MONGO_INITDB_DATABASE: yelpmdb
+      MONGO_INITDB_DATABASE: usersmdb
 
 
 networks:

@@ -1,5 +1,5 @@
 db.createUser({
   user: "mdbuser",
-  pwd: "pass",
-  roles: [ { role: "readWrite", db: "yelpmdb" } ]
+  pwd: "password1",
+  roles: [ { role: "readWrite", db: "usersmdb" } ]
 });
