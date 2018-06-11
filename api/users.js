@@ -20,9 +20,7 @@ function insertNewUser(user, mongoDB) {
         name: user.name,
         email: user.email,
         password: passwordHash,
-        businesses: [],
-        reviews: [],
-        photos: []
+        positions: []
       };
       const usersCollection = mongoDB.collection('users');
       return usersCollection.insertOne(userDocument);
@@ -146,29 +144,29 @@ router.get('/:userID', requireAuthentication, function (req, res, next) {
 
 // -----------------------------------------------------------------------------
 
-router.get('/:userID/businesses', requireAuthentication, function (req, res, next) {
+router.get('/:userID/positions', requireAuthentication, function (req, res, next) {
   const mysqlPool = req.app.locals.mysqlPool;
-  const ownerID = req.params.userID;
-  getBusinessesByOwnerID(ownerID, mysqlPool)
-    .then((ownerBusinesses) => {
+  const applicantID = req.params.userID;
+  getPositionsByOwnerID(applicantID, mysqlPool)
+    .then((applicantPositions) => {
       res.status(200).json({
-        businesses: ownerBusinesses
+        positions: applicantPositions
       });
     })
     .catch((err) => {
       console.log("  -- err:", err);
       res.status(500).json({
-        error: `Unable to fetch businesses for user ${ownerID}`
+        error: `Unable to fetch positions for user ${applicantID}`
       });
     });
 });
 
 
-function getBusinessesByOwnerID(ownerID, mysqlPool) {
+function getPositionsByOwnerID(applicantID, mysqlPool) {
  return new Promise((resolve, reject) => {
    mysqlPool.query(
-     'SELECT * FROM businesses WHERE ownerid = ?',
-     [ ownerID ],
+     'SELECT * FROM positions WHERE applicantID = ?',
+     [ applicantID ],
      function (err, results) {
        if (err) {
          reject(err);
@@ -254,28 +252,18 @@ function getPhotosByOwnerID(ownerID, mysqlPool) {
 
 // -----------------------------------------------------------------------------
 
-function addBusinessToUser(businessID, userID, mongoDB) {
+function addPositionToUser(positionID, userID, mongoDB) {
   const usersCollection = mongoDB.collection('users');
   return usersCollection.updateOne(
     { userID: userID },
-    { $push: { businesses: businessID } }
+    { $push: { positions: positionID } }
   ).then(() => {
-    return Promise.resolve(businessID);
+    return Promise.resolve(positionID);
   });
 }
 
-function addReviewToUser(reviewID, userID, mongoDB) {
-  const usersCollection = mongoDB.collection('users');
-  return usersCollection.updateOne(
-    { userID: userID },
-    { $push: { reviews: reviewID } }
-  ).then(() => {
-    return Promise.resolve(reviewID);
-  });
-}
 
 
 exports.router = router;
 exports.getUserByID = getUserByID;
-exports.addBusinessToUser = addBusinessToUser;
-exports.addReviewToUser = addReviewToUser;
+exports.addPositionToUser = addPositionToUser;

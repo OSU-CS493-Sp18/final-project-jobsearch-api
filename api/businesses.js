@@ -322,29 +322,5 @@ router.delete('/:businessID', function (req, res, next) {
     });
 });
 
-/*
- * Executes a MySQL query to fetch all businesses owned by a specified user,
- * based on on the user's ID.  Returns a Promise that resolves to an array
- * containing the requested businesses.  This array could be empty if the
- * specified user does not own any businesses.  This function does not verify
- * that the specified user ID corresponds to a valid user.
- */
-
-//  function getBusinessesByOwnerID(ownerID, mysqlPool) {
-//   return new Promise((resolve, reject) => {
-//     mysqlPool.query(
-//       'SELECT * FROM businesses WHERE ownerid = ?',
-//       [ ownerID ],
-//       function (err, results) {
-//         if (err) {
-//           reject(err);
-//         } else {
-//           resolve(results);
-//         }
-//       }
-//     );
-//   });
-// }
 
 exports.router = router;
-// exports.getBusinessesByOwnerID = getBusinessesByOwnerID;

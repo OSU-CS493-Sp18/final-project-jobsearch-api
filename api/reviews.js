@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const validation = require('../lib/validation');
-const { addReviewToUser } = require('./users');
 
 /*
  * Schema describing required/optional fields of a review object.
@@ -56,8 +55,6 @@ function insertNewReview(review, mysqlPool, mongoDB) {
         }
       }
     );
-  }).then((id) => {
-    return addReviewToUser(id, review.userid, mongoDB)
   });
 }
 
@@ -259,52 +256,29 @@ router.delete('/:reviewID', function (req, res, next) {
     });
 });
 
-/*
- * Executes a MySQL query to fetch all reviews for a specified business, based
- * on the business's ID.  Returns a Promise that resolves to an array
- * containing the requested reviews.  This array could be empty if the
- * specified business does not have any reviews.  This function does not verify
- * that the specified business ID corresponds to a valid business.
- */
-function getReviewsByBusinessID(businessID, mysqlPool) {
-  return new Promise((resolve, reject) => {
-    mysqlPool.query(
-      'SELECT * FROM reviews WHERE businessid = ?',
-      [ businessID ],
-      function (err, results) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
-}
+// /*
+//  * Executes a MySQL query to fetch all reviews for a specified business, based
+//  * on the business's ID.  Returns a Promise that resolves to an array
+//  * containing the requested reviews.  This array could be empty if the
+//  * specified business does not have any reviews.  This function does not verify
+//  * that the specified business ID corresponds to a valid business.
+//  */
+// function getReviewsByBusinessID(businessID, mysqlPool) {
+//   return new Promise((resolve, reject) => {
+//     mysqlPool.query(
+//       'SELECT * FROM reviews WHERE businessid = ?',
+//       [ businessID ],
+//       function (err, results) {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(results);
+//         }
+//       }
+//     );
+//   });
+// }
 
-/*
- * Executes a MySQL query to fetch all reviews by a specified user, based on
- * on the user's ID.  Returns a Promise that resolves to an array containing
- * the requested reviews.  This array could be empty if the specified user
- * does not have any reviews.  This function does not verify that the specified
- * user ID corresponds to a valid user.
- */
-function getReviewsByUserID(userID, mysqlPool) {
-  return new Promise((resolve, reject) => {
-    mysqlPool.query(
-      'SELECT * FROM reviews WHERE userid = ?',
-      [ userID ],
-      function (err, results) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
-}
 
 exports.router = router;
-exports.getReviewsByBusinessID = getReviewsByBusinessID;
-exports.getReviewsByUserID = getReviewsByUserID;
+// exports.getReviewsByBusinessID = getReviewsByBusinessID;

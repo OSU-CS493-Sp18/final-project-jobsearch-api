@@ -82,6 +82,7 @@ DROP TABLE IF EXISTS `positions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `positions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `applicantID` varchar(20) NOT NULL,
   `positionName` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `requirements` varchar(255) DEFAULT NULL,
@@ -100,7 +101,7 @@ CREATE TABLE `positions` (
 
 LOCK TABLES `positions` WRITE;
 /*!40000 ALTER TABLE `positions` DISABLE KEYS */;
-INSERT INTO `positions` VALUES (1,'Data Scientist, Entry Level (Intel)','In this role, you may assist business units with casual inferences and observations with finding patterns, relationships in data, develop software, algorithms and applications to apply mathematics to data.','Degree in Computer Science, machine learning and statistical approaches, and experience applying them, program languages such as Python, Perl, Java, and/or C++','2018-04-20','Hillsboro','OR',NULL,0),(2,'Data Analyst','Data Analyst is responsible for all aspects of the reporting systems and tools used to facilitate data-driven decision making across Multnomah Athletic Clubs governance, leadership and operational teams.','Bachelors Degree in Information Management, Computer Science or related field, Strong customer service skills., Related experience designing and developing data warehouse solutions, SQL database design and Microsoft SQL server.','2018-04-17','Portland','OR',NULL,0);
+INSERT INTO `positions` VALUES (1,'jake','Data Scientist, Entry Level (Intel)','In this role, you may assist business units with casual inferences and observations with finding patterns, relationships in data, develop software, algorithms and applications to apply mathematics to data.','Degree in Computer Science, machine learning and statistical approaches, and experience applying them, program languages such as Python, Perl, Java, and/or C++','2018-04-20','Hillsboro','OR',NULL,0),(2,'jake','Data Analyst','Data Analyst is responsible for all aspects of the reporting systems and tools used to facilitate data-driven decision making across Multnomah Athletic Clubs governance, leadership and operational teams.','Bachelors Degree in Information Management, Computer Science or related field, Strong customer service skills., Related experience designing and developing data warehouse solutions, SQL database design and Microsoft SQL server.','2018-04-17','Portland','OR',NULL,0);
 /*!40000 ALTER TABLE `positions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
