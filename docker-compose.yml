@@ -3,12 +3,12 @@ services:
 
   api:
     build: .
-    image: businesses-api
+    image: jobsearch-api
     restart: always
     ports:
       - 8000:8000
     networks:
-      - yelp-net
+      - job-net
     links:
       - mongo
     environment:
@@ -28,7 +28,7 @@ services:
     image: mysql:5
     restart: always
     networks:
-      - yelp-net
+      - job-net
     volumes:
       - mysql-data:/var/lib/mysql
       - ./db-init/:/docker-entrypoint-initdb.d
@@ -42,7 +42,7 @@ services:
   mongo:
     image: mongo:latest
     networks:
-      - yelp-net
+      - job-net
     volumes:
       - mongo-data:/data/db
       - ./db-init/:/docker-entrypoint-initdb.d
@@ -53,10 +53,10 @@ services:
 
 
 networks:
-  yelp-net:
+  job-net:
     driver: bridge
 volumes:
   mysql-data:
-    name: businesses-mysql-data
+    name: jobsearch-mysql-data
   mongo-data:
     name: users-mongo-data

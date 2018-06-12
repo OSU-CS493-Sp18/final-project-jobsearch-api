@@ -2,9 +2,6 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const ObjectId = require('mongodb').ObjectId;
 
-const { getReviewsByUserID } = require('./reviews');
-const { getPhotosByUserID } = require('./photos');
-
 const { generateAuthToken, requireAuthentication } = require('../lib/auth');
 
 function validateUserObject(user) {
@@ -167,78 +164,6 @@ function getPositionsByOwnerID(applicantID, mysqlPool) {
    mysqlPool.query(
      'SELECT * FROM positions WHERE applicantID = ?',
      [ applicantID ],
-     function (err, results) {
-       if (err) {
-         reject(err);
-       } else {
-         resolve(results);
-       }
-     }
-   );
- });
-}
-
-
-// -----------------------------------------------------------------------------
-
-
-router.get('/:userID/reviews', requireAuthentication, function (req, res, next) {
-  const mysqlPool = req.app.locals.mysqlPool;
-  const ownerID = req.params.userID;
-  getReviewsByOwnerID(ownerID, mysqlPool)
-    .then((ownerReviews) => {
-      res.status(200).json({
-        reviews: ownerReviews
-      });
-    })
-    .catch((err) => {
-      console.log("  -- err:", err);
-      res.status(500).json({
-        error: `Unable to fetch reviews for user ${ownerID}`
-      });
-    });
-});
-
-function getReviewsByOwnerID(ownerID, mysqlPool) {
- return new Promise((resolve, reject) => {
-   mysqlPool.query(
-     'SELECT * FROM reviews WHERE userid = ?',
-     [ ownerID ],
-     function (err, results) {
-       if (err) {
-         reject(err);
-       } else {
-         resolve(results);
-       }
-     }
-   );
- });
-}
-
-// -----------------------------------------------------------------------------
-
-router.get('/:userID/photos', requireAuthentication, function (req, res, next) {
-  const mysqlPool = req.app.locals.mysqlPool;
-  const ownerID = req.params.userID;
-  getPhotosByOwnerID(ownerID, mysqlPool)
-    .then((ownerPhotos) => {
-      res.status(200).json({
-        photos: ownerPhotos
-      });
-    })
-    .catch((err) => {
-      console.log("  -- err:", err);
-      res.status(500).json({
-        error: `Unable to fetch photos for user ${ownerID}`
-      });
-    });
-});
-
-function getPhotosByOwnerID(ownerID, mysqlPool) {
- return new Promise((resolve, reject) => {
-   mysqlPool.query(
-     'SELECT * FROM photos WHERE userid = ?',
-     [ ownerID ],
      function (err, results) {
        if (err) {
          reject(err);

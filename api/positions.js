@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const validation = require('../lib/validation');
-const { getReviewsByBusinessID } = require('./reviews');
-const { getPhotosByBusinessID } = require('./photos');
 const { addPositionToUser, getUserByID } = require('./users');
+const { requireAuthentication } = require('../lib/auth');
 
 /*
  * Schema describing required/optional fields of a position object.
@@ -66,7 +65,7 @@ function getPositionsPage(page, totalCount, mysqlPool) {
 /*
  * Route to return a paginated list of positions.
  */
-router.get('/', function (req, res) {
+router.get('/', requireAuthentication, function (req, res) {
   const mysqlPool = req.app.locals.mysqlPool;
   getPositionsCount(mysqlPool)
     .then((count) => {
@@ -122,7 +121,7 @@ function insertNewPosition(position, mysqlPool, mongoDB) {
 /*
  * Route to create a new position.
  */
-router.post('/', function (req, res, next) {
+router.post('/', requireAuthentication, function (req, res, next) {
   const mysqlPool = req.app.locals.mysqlPool;
    const mongoDB = req.app.locals.mongoDB;
   if (validation.validateAgainstSchema(req.body, positionSchema)) {
@@ -173,7 +172,7 @@ function getPositionByID(positionID, mysqlPool) {
 /*
  * Route to fetch info about a specific position.
  */
-router.get('/:positionID', function (req, res, next) {
+router.get('/:positionID', requireAuthentication, function (req, res, next) {
   const mysqlPool = req.app.locals.mysqlPool;
   const positionID = parseInt(req.params.positionID);
   getPositionByID(positionID, mysqlPool)
@@ -209,7 +208,7 @@ function replacePositionByID(positionID, position, mysqlPool) {
 /*
  * Route to replace data for a position.
  */
-router.put('/:positionID', function (req, res, next) {
+router.put('/:positionID', requireAuthentication, function (req, res, next) {
   const mysqlPool = req.app.locals.mysqlPool;
   const positionID = parseInt(req.params.positionID);
   if (validation.validateAgainstSchema(req.body, positionSchema)) {
@@ -256,7 +255,7 @@ function deletePositionByID(positionID, mysqlPool) {
 /*
  * Route to delete a position.
  */
-router.delete('/:positionID', function (req, res, next) {
+router.delete('/:positionID', requireAuthentication, function (req, res, next) {
   const mysqlPool = req.app.locals.mysqlPool;
   const positionID = parseInt(req.params.positionID);
   deletePositionByID(positionID, mysqlPool)
