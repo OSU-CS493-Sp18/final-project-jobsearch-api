@@ -1,2 +1,2 @@
-# final-project-jobsearch_api
-final-project-jobsearch_api created by GitHub Classroom
+# Cloud API Backend
+Designed a RESTful API to better organize open positions,  eld statistics, and company information. Implemented with Node.js and Docker with JSON Web Token Authentication and MySQL backup.
